@@ -26,11 +26,34 @@ export default class Player{
         return this.cardsTaulerPlayer[tauler];
     }
 
-    setCardTauler(idcard, tauler){
+    getAllCardsTauler(){
+        return this.cardsTaulerPlayer;
+    }
 
+    getNameAllCardsTauler(){
+        let alltaulersplayer = this.getAllCardsTauler();
+
+        let names = [];
+
+        for(let i = 0; i < Object.entries(alltaulersplayer).length; i++){
+            names.push(Object.entries(alltaulersplayer)[i][0]);
+        }
+
+        return names;
+    }
+
+    setCardTauler(idcard, tauler){
         for(let i = 0; i < this.cardsMaPlayer.length; i++){
             if(this.cardsMaPlayer[i].id == idcard){
                 this.cardsTaulerPlayer[tauler].push(this.cardsMaPlayer[i]);
+                this.cardsMaPlayer[i] = "";
+            }
+        }
+    }
+
+    deleteCardMaPlayer(idCard){
+        for(let i = 0; i < this.cardsMaPlayer.length; i++){
+            if(this.cardsMaPlayer[i].id == idCard){
                 this.cardsMaPlayer[i] = "";
             }
         }

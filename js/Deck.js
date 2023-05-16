@@ -38,4 +38,9 @@ export default class Deck {
     pop(indxCard) {
         this.cards.splice(indxCard, 1);
     }
+
+    createCard(tipus, color, id){
+        let card = new Card(tipus, color, id)
+        return card;
+    }
 }

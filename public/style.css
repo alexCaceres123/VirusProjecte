@@ -177,3 +177,11 @@ body{
     width: 70%;
     top: 9.5vw;
 }
+
+.trash{
+    position: absolute;
+    width: 10vw;
+    height: 10vw;
+    bottom: 0%;
+    right: 0%;
+}

@@ -8,6 +8,7 @@ export default class Vista{
         this.containersPlayer = document.querySelectorAll(".playerCardsContainer");
         this.containersMaquina = document.querySelectorAll(".maquinaCardsContainer");
         this.parentContainer = document.querySelector(".container");
+        this.trash = document.querySelector(".trash");
     }
 
     listenners(allFunctions){
@@ -23,6 +24,14 @@ export default class Vista{
                 this.drop(e, container, allFunctions);
             });
 
+        });
+
+        this.trash.addEventListener('dragenter', this.dragEnter);
+
+        this.trash.addEventListener('dragover', this.dragOver);
+
+        this.trash.addEventListener('drop', (e) => {
+            this.trashDrop(e, allFunctions);
         });
 
     }
@@ -75,15 +84,10 @@ export default class Vista{
         this.buttonStartGame.style.display = "none";
     }
 
-    addClassDragOverContainersPlayer(){
-        for(let containerPlayer of this.containersPlayer){
-            containerPlayer.classList.add("drag-over");
-        }
-    }
-
-    addClassDragOverContainersMaquina(){
-        for(let containerMaquina of this.containersMaquina){
-            containerMaquina.classList.add("drag-over");
+    addClassDragOverContainers(containers){
+        for(let nameContainer of containers){
+            let container = document.querySelector(`.${nameContainer}`);
+            container.classList.add("drag-over");
         }
     }
 
@@ -128,5 +132,14 @@ export default class Vista{
 
             allFunctions["addNewCardDeckPlayer"](player);
         }   
+    }
+
+
+    trashDrop(e, allFunctions){
+        let id = e.dataTransfer.getData('id');
+        let player = e.dataTransfer.getData('player');
+        let draggable = document.getElementById(id);
+        this.parentContainer.removeChild(draggable);
+        allFunctions["trashCard"](id, player);
     }
 }

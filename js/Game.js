@@ -8,7 +8,8 @@ export default class Game{
             "startGame" : this.startGame.bind(this),
             "onPosarCarta" : this.onPosarCarta.bind(this),
             "addCartaTablero" : this.addCartaTablero.bind(this),
-            "addNewCardDeckPlayer" : this.addNewCardDeckPlayer.bind(this)
+            "addNewCardDeckPlayer" : this.addNewCardDeckPlayer.bind(this),
+            "trashCard" : this.trashCard.bind(this)
         }
         this.eventListeners()
     }
@@ -46,18 +47,24 @@ export default class Game{
     
         //Falta posar les condicions de on posar les cartes
 
-        if(card.id != ""){
-            let tipus = card.id.split("_")[0];
-            let color = card.id.split("_")[1];
-            let player = card.className.split(" ")[1];
+        let tipus = card.id.split("_")[0];
+        let color = card.id.split("_")[1];
+        let player = card.className.split(" ")[1];
+        
+        let alltaulersplayer = this.player.getNameAllCardsTauler();
+        let alltaulersmaquina = this.maquina.getNameAllCardsTauler();
 
-            if(player == "playerCard"){
-                this.vista.addClassDragOverContainersPlayer();
-            }
-            else if(player == "maquinaCard"){
-                this.vista.addClassDragOverContainersMaquina();
-            }
-        }            
+        //AQUI ES POSARAN EL NOM DELS CONTENIDORS QUE PINTARAN AL POSAR EL MOUSE SOBRE LA CARTA
+
+        let paintContainers = []
+        
+        if(player == "playerCard"){
+            this.vista.addClassDragOverContainers(alltaulersplayer);
+        }
+        else if(player == "maquinaCard"){
+            this.vista.addClassDragOverContainers(alltaulersmaquina);
+        }
+      
     }
 
     valAddCard(card, container, player){
@@ -105,9 +112,24 @@ export default class Game{
                 }
             }
         }
-
-        console.log(this.player.cardsTaulerPlayer);
-        console.log(this.maquina.cardsTaulerPlayer);
-
     }
+
+    trashCard(idCard, player){
+
+        let tipus = idCard.split("_")[0];
+        let color = idCard.split("_")[1];
+        let number = idCard.split("_")[2];
+        let card = this.deck.createCard(tipus, color, number)
+        this.deck.setCard(card);
+        
+        if(player == "player"){
+            this.player.deleteCardMaPlayer(card.id)
+        }
+        else if(player == "maquina"){
+            this.maquina.deleteCardMaPlayer(card.id)
+        }
+        
+        this.addNewCardDeckPlayer(player);
+    }
+
 }
