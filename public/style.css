@@ -98,22 +98,20 @@ body{
 }
 
 .playerCard1{
-    right: 2%;
+    right: 1%;
     bottom: 9vw;
-    transform: rotate(-10deg);
 }
 
 .playerCard2{
-    right: 11%;
-    bottom: 7.5vw;
-    transform: rotate(-40deg);
+    right: 9%;
+    bottom: 8vw;
+    transform: rotate(-30deg);
 }
 
 .playerCard3{
-    right: 13%;
-    bottom: 1vw;
-    transform: rotate(-70deg);
-
+    right: 14%;
+    bottom: 3vw;
+    transform: rotate(-50deg);
 }
 
 .maquinaCard1{
