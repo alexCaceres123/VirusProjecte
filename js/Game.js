@@ -4,17 +4,17 @@ export default class Game{
         this.player = player1;
         this.maquina = player2;
         this.vista = vista;
+        this.allFunctions = {
+            "startGame" : this.startGame.bind(this),
+            "onPosarCarta" : this.onPosarCarta.bind(this),
+            "addCartaTablero" : this.addCartaTablero.bind(this),
+            "addNewCardDeckPlayer" : this.addNewCardDeckPlayer.bind(this)
+        }
         this.eventListeners()
     }
 
     eventListeners(){
-        let allFunctions = {
-            "startGame" : this.startGame.bind(this),
-            "onPosarCarta" : this.onPosarCarta.bind(this),
-            "addCartaTablero" : this.addCartaTablero.bind(this)
-        }
-
-        this.vista.listenners(allFunctions);
+        this.vista.listenners(this.allFunctions);
     }
 
     startGame(){
@@ -22,19 +22,23 @@ export default class Game{
         
         for(let i = 0; i < 3; i++){
             let card = this.deck.getCard();
-            this.player.setCardsMaPlayer(card);
+            this.player.setCardsMaPlayer(card, i);
         }
 
         for(let i = 0; i < 3; i++){
             let card = this.deck.getCard();
-            this.maquina.setCardsMaPlayer(card);
+            this.maquina.setCardsMaPlayer(card, i);
         }
 
         let maPlayer = this.player.getCardsMaPlayer();
         let maMaquina = this.maquina.getCardsMaPlayer();
 
-        this.vista.addHandCardsPlayer(maPlayer);
-        this.vista.addHandCardsMaquina(maMaquina);
+
+        for(let i = 0; i < 3; i++){
+            this.vista.addHandCardsPlayer(maPlayer[i], i,  this.allFunctions);
+            this.vista.addHandCardsMaquina(maMaquina[i], i, this.allFunctions);
+        }
+
         this.vista.disableButtonStartGame();
     }
 
@@ -76,5 +80,34 @@ export default class Game{
 
             }
         }
+    }
+
+    addNewCardDeckPlayer(player){
+        let card = this.deck.getCard();
+
+        if(player == "player"){
+
+            let maPlayer = this.player.getCardsMaPlayer();
+            for(let i = 0; i < maPlayer.length; i++){
+                if(maPlayer[i] == ""){
+                    this.player.setCardsMaPlayer(card, i)
+                    this.vista.addHandCardsPlayer(card, i, this.allFunctions);
+                }
+            }
+
+        }else if(player == "maquina"){
+
+            let maPlayer = this.maquina.getCardsMaPlayer();
+            for(let i = 0; i < maPlayer.length; i++){
+                if(maPlayer[i] == ""){
+                    this.maquina.setCardsMaPlayer(card, i)
+                    this.vista.addHandCardsMaquina(card, i, this.allFunctions);
+                }
+            }
+        }
+
+        console.log(this.player.cardsTaulerPlayer);
+        console.log(this.maquina.cardsTaulerPlayer);
+
     }
 }

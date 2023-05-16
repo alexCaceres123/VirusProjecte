@@ -18,8 +18,8 @@ export default class Player{
         return this.cardsMaPlayer;
     }
 
-    setCardsMaPlayer(card){
-        this.cardsMaPlayer.push(card);
+    setCardsMaPlayer(card, indx){
+        this.cardsMaPlayer[indx] = card;
     }
 
     getCardsTauler(tauler){
@@ -31,11 +31,8 @@ export default class Player{
         for(let i = 0; i < this.cardsMaPlayer.length; i++){
             if(this.cardsMaPlayer[i].id == idcard){
                 this.cardsTaulerPlayer[tauler].push(this.cardsMaPlayer[i]);
-                this.cardsMaPlayer.splice(i, 1);
+                this.cardsMaPlayer[i] = "";
             }
         }
-
-        console.log(this.cardsTaulerPlayer[tauler]);
-        console.log(this.cardsMaPlayer);
     }
 }
