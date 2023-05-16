@@ -10,7 +10,8 @@ export default class Game{
     eventListeners(){
         let allFunctions = {
             "startGame" : this.startGame.bind(this),
-            "onPosarCarta" : this.onPosarCarta.bind(this)
+            "onPosarCarta" : this.onPosarCarta.bind(this),
+            "addCartaTablero" : this.addCartaTablero.bind(this)
         }
 
         this.vista.listenners(allFunctions);
@@ -53,5 +54,27 @@ export default class Game{
                 this.vista.addClassDragOverContainersMaquina();
             }
         }            
+    }
+
+    valAddCard(card, container, player){
+
+    }
+
+    addCartaTablero(card, container){
+        if(card != ""){
+            let nameContainer = container.className.split(" ")[2];
+
+            if(nameContainer.split("C")[0] == "player"){
+                this.player.setCardTauler(card, nameContainer);
+                let numCartesContainer = this.player.getCardsTauler(nameContainer);
+                return numCartesContainer.length;
+
+            }else if(nameContainer.split("C")[0] == "maquina"){
+                this.maquina.setCardTauler(card, nameContainer);
+                let numCartesContainer = this.maquina.getCardsTauler(nameContainer);
+                return numCartesContainer.length;
+
+            }
+        }
     }
 }

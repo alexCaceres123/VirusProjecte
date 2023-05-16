@@ -33,7 +33,7 @@ export default class Vista{
             container.addEventListener('dragover', this.dragOver);
 
             container.addEventListener('drop', (e) => {
-                this.drop(e);
+                this.drop(e, container, allFunctions);
             });
 
         });
@@ -85,21 +85,30 @@ export default class Vista{
         }
     }
 
-    cardDragStart(){
-        console.log("cardDragStart");
+    cardDragStart(e){
+        let claseCard = e.target.classList[1].split("C")[0];
+        e.dataTransfer.setData('id', e.target.id);
+        e.dataTransfer.setData('player', claseCard);
     }
 
     dragEnter(e){
         e.preventDefault();
-        console.log("dragEnter");
     }
 
     dragOver(e){
         e.preventDefault();
-        console.log("dragOver");
     }
 
-    drop(e){
-        console.log("drop");
+    drop(e, container, allFunctions){
+
+        let id = e.dataTransfer.getData('id');
+        let player = e.dataTransfer.getData('player');
+        let draggable = document.getElementById(id);
+        let numberPosition = allFunctions["addCartaTablero"](id, container);
+
+        draggable.classList = `cardDentroTablero${numberPosition - 1}`
+        if(e.target instanceof HTMLImageElement) e.target.parentNode.appendChild(draggable);
+        else e.target.appendChild(draggable);
+
     }
 }

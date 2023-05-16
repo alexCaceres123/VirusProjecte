@@ -9,7 +9,7 @@ export default class Player{
         let allContainers = {};
 
         for(let i = 1; i <= 4; i++){
-            allContainers[`${this.name}cardsContainer${i}`] = [];
+            allContainers[`${this.name}CardsContainer${i}`] = [];
         }
         return allContainers;
     }
@@ -26,7 +26,16 @@ export default class Player{
         return this.cardsTaulerPlayer[tauler];
     }
 
-    setCardTauler(card, tauler){
-        this.cardsTaulerPlayer[tauler].push(card);
+    setCardTauler(idcard, tauler){
+
+        for(let i = 0; i < this.cardsMaPlayer.length; i++){
+            if(this.cardsMaPlayer[i].id == idcard){
+                this.cardsTaulerPlayer[tauler].push(this.cardsMaPlayer[i]);
+                this.cardsMaPlayer.splice(i, 1);
+            }
+        }
+
+        console.log(this.cardsTaulerPlayer[tauler]);
+        console.log(this.cardsMaPlayer);
     }
 }
