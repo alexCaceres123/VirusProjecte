@@ -84,32 +84,17 @@ body{
     position: absolute;
     z-index: 0;
     width: 9%;
+    transition: width 0.5s;
 }
 
 .cards:hover{
-    animation-name: rotate;
-    animation-duration: 0.5s;
-    animation-fill-mode: forwards;
-}
-
-@keyframes rotate {
-    100% {
-        width: 10%;
-    }
+    width: 10%;
 }
 
 .playerCard1{
     right: 1%;
     bottom: 9vw;
-    /* animation-name: prova;
-    animation-duration: 3s;  
-    animation-fill-mode: both; */
 }
-/* 
-@keyframes prova {
-    from {top: 35vh; left: 2vh;}
-    to {top: 38vh; left: 7vh;}
-  } */
 
 .playerCard2{
     right: 9%;
