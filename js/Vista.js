@@ -88,6 +88,7 @@ export default class Vista{
         for(let nameContainer of containers){
             let container = document.querySelector(`.${nameContainer}`);
             container.classList.add("drag-over");
+            container.style = "opacity: 1;"
         }
     }
 

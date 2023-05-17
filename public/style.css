@@ -77,6 +77,7 @@ body{
     width: 20%;
     height: 21vw;
     border-radius: 10px;  
+    border: dashed 5px rgba(255, 0, 0, 0);
 }
 
 .cards{
@@ -100,7 +101,15 @@ body{
 .playerCard1{
     right: 1%;
     bottom: 9vw;
+    /* animation-name: prova;
+    animation-duration: 3s;  
+    animation-fill-mode: both; */
 }
+/* 
+@keyframes prova {
+    from {top: 35vh; left: 2vh;}
+    to {top: 38vh; left: 7vh;}
+  } */
 
 .playerCard2{
     right: 9%;
@@ -152,7 +161,8 @@ body{
 }
 
 .drag-over {
-    border: dashed 5px red;
+    border: dashed 5px #884EA0;
+    transition: border-color 1s;
 }
 
 .hide {
@@ -183,3 +193,12 @@ body{
     bottom: 0%;
     right: 0%;
 }
+
+.deck{
+    position: absolute;
+    width: 8%;
+    top: 35vh;
+    left: 2vh;
+}
+
+
