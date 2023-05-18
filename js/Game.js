@@ -4,18 +4,38 @@ export default class Game{
         this.player = player1;
         this.maquina = player2;
         this.vista = vista;
+        this.torn = "maquina";
         this.allFunctions = {
             "startGame" : this.startGame.bind(this),
             "onPosarCarta" : this.onPosarCarta.bind(this),
             "addCartaTablero" : this.addCartaTablero.bind(this),
             "addNewCardDeckPlayer" : this.addNewCardDeckPlayer.bind(this),
-            "trashCard" : this.trashCard.bind(this)
+            "trashCard" : this.trashCard.bind(this),
+            "changeTorn" : this.changeTorn.bind(this),
+            "getTorn" : this.getTorn.bind(this)
         }
         this.eventListeners()
     }
 
     eventListeners(){
         this.vista.listenners(this.allFunctions);
+    }
+
+    changeTorn(){
+        let MaPlayer = this.player.getCardsMaPlayer();
+        let MaMaquina = this.maquina.getCardsMaPlayer();
+
+        this.vista.changeTornView(this.torn, MaPlayer, MaMaquina);
+
+        if(this.torn == "player"){
+            this.torn = "maquina";
+        }else{
+            this.torn = "player";
+        }
+    }
+
+    getTorn(){
+        return this.torn;
     }
 
     startGame(){
@@ -41,6 +61,7 @@ export default class Game{
         }
 
         this.vista.disableButtonStartGame();
+        this.changeTorn();
     }
 
     onPosarCarta(card){
@@ -51,18 +72,20 @@ export default class Game{
         let color = card.id.split("_")[1];
         let player = card.className.split(" ")[1];
         
-        let alltaulersplayer = this.player.getNameAllCardsTauler();
-        let alltaulersmaquina = this.maquina.getNameAllCardsTauler();
+        let nameAllTaulersPlayer = this.player.getNameAllCardsTauler();
+        let nameAllTaulersMaquina = this.maquina.getNameAllCardsTauler();
+        let ContainersPlayer = this.player.getAllCardsTauler();
+        let ContainersMaquina = this.maquina.getAllCardsTauler();
 
         //AQUI ES POSARAN EL NOM DELS CONTENIDORS QUE PINTARAN AL POSAR EL MOUSE SOBRE LA CARTA
 
         let paintContainers = []
         
         if(player == "playerCard"){
-            this.vista.addClassDragOverContainers(alltaulersplayer);
+            this.vista.addClassDragOverContainers(nameAllTaulersPlayer);
         }
         else if(player == "maquinaCard"){
-            this.vista.addClassDragOverContainers(alltaulersmaquina);
+            this.vista.addClassDragOverContainers(nameAllTaulersMaquina);
         }
       
     }

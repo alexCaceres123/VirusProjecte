@@ -3,15 +3,15 @@ export default class Vista{
         this.buttonStartGame = document.querySelector(".startGame");
         this.allhandCards = document.querySelectorAll(".cards");
         this.allContainers = document.querySelectorAll(".cardsContainer");
-        this.playerHandCards = document.querySelectorAll(".playerCard");
-        this.maquinaHandCards = document.querySelectorAll(".maquinaCard");
+        // this.playerHandCards = document.querySelectorAll(".playerCard");
+        // this.maquinaHandCards = document.querySelectorAll(".maquinaCard");
         this.containersPlayer = document.querySelectorAll(".playerCardsContainer");
         this.containersMaquina = document.querySelectorAll(".maquinaCardsContainer");
         this.parentContainer = document.querySelector(".container");
         this.trash = document.querySelector(".trash");
     }
 
-    listenners(allFunctions){
+    listenners(allFunctions, torn){
         this.buttonStartGame.addEventListener("click", allFunctions["startGame"]);
 
         this.allContainers.forEach(container => {
@@ -115,31 +115,65 @@ export default class Vista{
     }
 
     drop(e, container, allFunctions){
-
-        let id = e.dataTransfer.getData('id');
         let player = e.dataTransfer.getData('player');
-        let draggable = document.getElementById(id);
-        let numberPosition = allFunctions["addCartaTablero"](id, container);
+        let torn = allFunctions["getTorn"]();
 
-        if(numberPosition){
-            draggable.classList = `cardDentroTablero${numberPosition - 1}`
-            if(e.target instanceof HTMLImageElement){
-                e.target.parentNode.appendChild(draggable);
-            }
-            else{
-                e.target.appendChild(draggable);
-            }
+        if(player == torn){
+            let id = e.dataTransfer.getData('id');
+            let draggable = document.getElementById(id);
+            let numberPosition = allFunctions["addCartaTablero"](id, container);
 
-            allFunctions["addNewCardDeckPlayer"](player);
-        }   
+            if(numberPosition){
+                draggable.classList = `cardDentroTablero${numberPosition - 1}`
+                if(e.target instanceof HTMLImageElement){
+                    e.target.parentNode.appendChild(draggable);
+                }
+                else{
+                    e.target.appendChild(draggable);
+                }
+                allFunctions["addNewCardDeckPlayer"](player);
+                allFunctions["changeTorn"]();
+            }  
+        } 
     }
 
 
     trashDrop(e, allFunctions){
-        let id = e.dataTransfer.getData('id');
         let player = e.dataTransfer.getData('player');
-        let draggable = document.getElementById(id);
-        this.parentContainer.removeChild(draggable);
-        allFunctions["trashCard"](id, player);
+        let torn = allFunctions["getTorn"]();
+
+        if(player == torn){
+            let id = e.dataTransfer.getData('id');
+            let draggable = document.getElementById(id);
+            this.parentContainer.removeChild(draggable);
+            allFunctions["trashCard"](id, player);
+            allFunctions["changeTorn"]();
+        }
+    }
+
+    changeTornView(player, maPlayer, maMaquina){
+        
+        let playerHandCards = document.querySelectorAll(".playerCard");
+        let maquinaHandCards = document.querySelectorAll(".maquinaCard");
+
+        if(player == "player"){
+            for(let handCard of playerHandCards){
+                handCard.src = "/img/cartaRedera.png"
+            }
+
+            for(let i = 0; i < 3; i++){
+                maquinaHandCards[i].src = `/img/${maMaquina[i].color}-${maMaquina[i].tipus}.png`;
+            }
+            
+        }
+        else if(player == "maquina"){
+            for(let handCard of maquinaHandCards){
+                handCard.src = "/img/cartaRedera.png"
+            }
+
+            for(let i = 0; i < 3; i++){
+                playerHandCards[i].src = `/img/${maPlayer[i].color}-${maPlayer[i].tipus}.png`;
+            }
+        }
     }
 }
