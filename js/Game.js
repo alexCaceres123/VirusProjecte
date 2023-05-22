@@ -97,18 +97,32 @@ export default class Game{
     addCartaTablero(card, container){
         if(card != ""){
             let nameContainer = container.className.split(" ")[2];
+            let torn = this.torn;
+            let numCartesContainer = [];
 
-            if(nameContainer.split("C")[0] == "player"){
-                this.player.setCardTauler(card, nameContainer);
-                let numCartesContainer = this.player.getCardsTauler(nameContainer);
-                return numCartesContainer.length;
+            let cartaReal = []
 
-            }else if(nameContainer.split("C")[0] == "maquina"){
-                this.maquina.setCardTauler(card, nameContainer);
-                let numCartesContainer = this.maquina.getCardsTauler(nameContainer);
-                return numCartesContainer.length;
+            if(torn == "player"){
+                cartaReal = this.player.getCardXId(card);
+                this.player.deleteCardMaPlayer(card);
 
+            }else if(torn == "maquina"){
+                cartaReal = this.maquina.getCardXId(card);
+                this.maquina.deleteCardMaPlayer(card);
             }
+
+            
+            if(nameContainer.split("C")[0] == "player"){
+                this.player.setCardTauler(cartaReal, nameContainer)
+                numCartesContainer = this.player.getCardsTauler(nameContainer);
+            }
+            else if(nameContainer.split("C")[0] == "maquina"){
+                this.maquina.setCardTauler(cartaReal, nameContainer)
+                numCartesContainer = this.maquina.getCardsTauler(nameContainer);
+            }
+
+            return numCartesContainer.length;
+
         }
     }
 

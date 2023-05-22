@@ -42,19 +42,22 @@ export default class Player{
         return names;
     }
 
-    setCardTauler(idcard, tauler){
-        for(let i = 0; i < this.cardsMaPlayer.length; i++){
-            if(this.cardsMaPlayer[i].id == idcard){
-                this.cardsTaulerPlayer[tauler].push(this.cardsMaPlayer[i]);
-                this.cardsMaPlayer[i] = "";
-            }
-        }
+    setCardTauler(card, tauler){
+        this.cardsTaulerPlayer[tauler].push(card);
     }
 
     deleteCardMaPlayer(idCard){
         for(let i = 0; i < this.cardsMaPlayer.length; i++){
             if(this.cardsMaPlayer[i].id == idCard){
                 this.cardsMaPlayer[i] = "";
+            }
+        }
+    }
+
+    getCardXId(idCard){
+        for(let i = 0; i < this.cardsMaPlayer.length; i++){
+            if(this.cardsMaPlayer[i].id == idCard){
+                return this.cardsMaPlayer[i]
             }
         }
     }

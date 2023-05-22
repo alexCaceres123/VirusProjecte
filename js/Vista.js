@@ -122,7 +122,6 @@ export default class Vista{
             let id = e.dataTransfer.getData('id');
             let draggable = document.getElementById(id);
             let numberPosition = allFunctions["addCartaTablero"](id, container);
-
             if(numberPosition){
                 draggable.classList = `cardDentroTablero${numberPosition - 1}`
                 if(e.target instanceof HTMLImageElement){
