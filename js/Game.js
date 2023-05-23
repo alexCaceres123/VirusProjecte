@@ -1,10 +1,9 @@
 export default class Game{
     constructor(deck, player1, player2, vista){
         this.deck = deck;
-        this.player = player1;
-        this.maquina = player2;
+        this.players = [player1, player2];
         this.vista = vista;
-        this.torn = "maquina";
+        this.torn = 1;
         this.allFunctions = {
             "startGame" : this.startGame.bind(this),
             "onPosarCarta" : this.onPosarCarta.bind(this),
@@ -22,16 +21,15 @@ export default class Game{
     }
 
     changeTorn(){
-        let MaPlayer = this.player.getCardsMaPlayer();
-        let MaMaquina = this.maquina.getCardsMaPlayer();
+        let ma = this.players[this.torn].getCardsMaPlayer();
+        this.vista.changeTornView(this.torn, ma);
 
-        this.vista.changeTornView(this.torn, MaPlayer, MaMaquina);
-
-        if(this.torn == "player"){
-            this.torn = "maquina";
-        }else{
-            this.torn = "player";
+        if(this.torn == 0){
+            this.torn = 1;
+        }else if(this.torn == 1){
+            this.torn = 0;
         }
+
     }
 
     getTorn(){
@@ -40,28 +38,21 @@ export default class Game{
 
     startGame(){
         this.deck.createDeck();
+
+        for(let i = 0; i < 3; i++){
+            let card = this.deck.getCard();
+            this.players[0].setCardsMaPlayer(card, i);
+            this.vista.addHandCards(card, i, this.allFunctions, 0);
+        }
         
         for(let i = 0; i < 3; i++){
             let card = this.deck.getCard();
-            this.player.setCardsMaPlayer(card, i);
+            this.players[1].setCardsMaPlayer(card, i);
+            this.vista.addHandCards(card, i, this.allFunctions, 1);
         }
 
-        for(let i = 0; i < 3; i++){
-            let card = this.deck.getCard();
-            this.maquina.setCardsMaPlayer(card, i);
-        }
-
-        let maPlayer = this.player.getCardsMaPlayer();
-        let maMaquina = this.maquina.getCardsMaPlayer();
-
-
-        for(let i = 0; i < 3; i++){
-            this.vista.addHandCardsPlayer(maPlayer[i], i,  this.allFunctions);
-            this.vista.addHandCardsMaquina(maMaquina[i], i, this.allFunctions);
-        }
-
-        this.vista.disableButtonStartGame();
         this.changeTorn();
+        this.vista.disableButtonStartGame();
     }
 
     onPosarCarta(card){
@@ -69,31 +60,29 @@ export default class Game{
         //Falta posar les condicions de on posar les cartes
 
         let tipus = card.id.split("_")[0];
-        let color = card.id.split("_")[1];
-        let player = card.className.split(" ")[1];
+        let color = card.id.split("_")[1];        
+        let torn = this.torn;
         
-        let nameAllTaulersPlayer = this.player.getNameAllCardsTauler();
-        let nameAllTaulersMaquina = this.maquina.getNameAllCardsTauler();
-        let ContainersPlayer = this.player.getAllCardsTauler();
-        let ContainersMaquina = this.maquina.getAllCardsTauler();
+        
+        // let nameAllTaulersPlayer = this.pl.getNameAllCardsTauler();
+        // let nameAllTaulersMaquina = this.maquina.getNameAllCardsTauler();
+        // let nameAllTaulers = nameAllTaulersPlayer.concat(nameAllTaulersMaquina);
+        // let containersPlayerCards = this.player.getAllCardsTauler();
+        // let containersMaquinaCards = this.maquina.getAllCardsTauler();
 
         //AQUI ES POSARAN EL NOM DELS CONTENIDORS QUE PINTARAN AL POSAR EL MOUSE SOBRE LA CARTA
 
-        let paintContainers = []
+        let paintContainers = [];
+
+        // if(tipus == "organ"){
+            
+        // }
         
-        if(player == "playerCard"){
-            this.vista.addClassDragOverContainers(nameAllTaulersPlayer);
-        }
-        else if(player == "maquinaCard"){
-            this.vista.addClassDragOverContainers(nameAllTaulersMaquina);
-        }
-      
-    }
-
-    valAddCard(card, container, player){
+        this.vista.addClassDragOverContainers(paintContainers);
+        this.vista.addClassDragOverContainers(paintContainers);
 
     }
-
+    
     addCartaTablero(card, container){
         if(card != ""){
             let nameContainer = container.className.split(" ")[2];
@@ -102,56 +91,40 @@ export default class Game{
 
             let cartaReal = []
 
-            if(torn == "player"){
-                cartaReal = this.player.getCardXId(card);
-                this.player.deleteCardMaPlayer(card);
-
-            }else if(torn == "maquina"){
-                cartaReal = this.maquina.getCardXId(card);
-                this.maquina.deleteCardMaPlayer(card);
-            }
-
+            //AQUI ES TREU LA CARTA DEL JUGADOR A TRAVÉS DEL TORN JA QUE SI ALGU TIRA UNA CARTA SABRE QUI ES PER EL TORN
             
-            if(nameContainer.split("C")[0] == "player"){
-                this.player.setCardTauler(cartaReal, nameContainer)
-                numCartesContainer = this.player.getCardsTauler(nameContainer);
-            }
-            else if(nameContainer.split("C")[0] == "maquina"){
-                this.maquina.setCardTauler(cartaReal, nameContainer)
-                numCartesContainer = this.maquina.getCardsTauler(nameContainer);
-            }
+            cartaReal = this.players[this.torn].getCardXId(card);
+            this.players[this.torn].deleteCardMaPlayer(card);
+
+            //AFEGEIXO LA CARTAREAL AL CONTENIDOR INDICAT
+            
+            //if(x.indexOf(nameContainer.split("C")[0]) !== -1) afegir carta;
+
+
+            this.players[this.torn].setCardTauler(cartaReal, nameContainer)
+            numCartesContainer = this.players[this.torn].getCardsTauler(nameContainer);
+
+            //RETURN PER SABER ON POSAR LA CARTA A LA VISTA
 
             return numCartesContainer.length;
 
         }
     }
 
-    addNewCardDeckPlayer(player){
+    addNewCardDeckPlayer(){
         let card = this.deck.getCard();
 
-        if(player == "player"){
-
-            let maPlayer = this.player.getCardsMaPlayer();
-            for(let i = 0; i < maPlayer.length; i++){
-                if(maPlayer[i] == ""){
-                    this.player.setCardsMaPlayer(card, i)
-                    this.vista.addHandCardsPlayer(card, i, this.allFunctions);
-                }
-            }
-
-        }else if(player == "maquina"){
-
-            let maPlayer = this.maquina.getCardsMaPlayer();
-            for(let i = 0; i < maPlayer.length; i++){
-                if(maPlayer[i] == ""){
-                    this.maquina.setCardsMaPlayer(card, i)
-                    this.vista.addHandCardsMaquina(card, i, this.allFunctions);
-                }
+        let ma = this.players[this.torn].getCardsMaPlayer();
+        for(let i = 0; i < ma.length; i++){
+            if(ma[i] == ""){
+                this.players[this.torn].setCardsMaPlayer(card, i)                    
+                this.vista.addHandCards(card, i, this.allFunctions, this.torn);
             }
         }
+
     }
 
-    trashCard(idCard, player){
+    trashCard(idCard){
 
         let tipus = idCard.split("_")[0];
         let color = idCard.split("_")[1];
@@ -159,14 +132,9 @@ export default class Game{
         let card = this.deck.createCard(tipus, color, number)
         this.deck.setCard(card);
         
-        if(player == "player"){
-            this.player.deleteCardMaPlayer(card.id)
-        }
-        else if(player == "maquina"){
-            this.maquina.deleteCardMaPlayer(card.id)
-        }
-        
-        this.addNewCardDeckPlayer(player);
+        this.players[this.torn].deleteCardMaPlayer(card.id)
+
+        this.addNewCardDeckPlayer();
     }
 
 }

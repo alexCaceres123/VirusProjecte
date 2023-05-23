@@ -3,15 +3,12 @@ export default class Vista{
         this.buttonStartGame = document.querySelector(".startGame");
         this.allhandCards = document.querySelectorAll(".cards");
         this.allContainers = document.querySelectorAll(".cardsContainer");
-        // this.playerHandCards = document.querySelectorAll(".playerCard");
-        // this.maquinaHandCards = document.querySelectorAll(".maquinaCard");
-        this.containersPlayer = document.querySelectorAll(".playerCardsContainer");
-        this.containersMaquina = document.querySelectorAll(".maquinaCardsContainer");
         this.parentContainer = document.querySelector(".container");
         this.trash = document.querySelector(".trash");
+        this.players = ["player", "maquina"];
     }
 
-    listenners(allFunctions, torn){
+    listenners(allFunctions){
         this.buttonStartGame.addEventListener("click", allFunctions["startGame"]);
 
         this.allContainers.forEach(container => {
@@ -36,35 +33,13 @@ export default class Vista{
 
     }
 
-    addHandCardsPlayer(card, index, allFunctions){
+    addHandCards(card, index, allFunctions, torn){
         let src = `/img/${card.color}-${card.tipus}.png`;
         let id = card.id;
 
         const img = document.createElement("img")
         img.setAttribute("src", src);
-        img.setAttribute("class",  `cards playerCard playerCard${index + 1}`);
-        img.setAttribute("id", `${id}`);
-        img.setAttribute("draggable", "true");
-        this.parentContainer.appendChild(img);
-
-        img.addEventListener("dragstart", this.cardDragStart)
-
-        img.addEventListener("mouseover", () => {
-            allFunctions["onPosarCarta"](img);
-        });
-
-        img.addEventListener('mouseout', () => {
-            this.deleteClassDragOver();
-        });
-    }
-
-    addHandCardsMaquina(card, index, allFunctions){
-        let src = `/img/${card.color}-${card.tipus}.png`;
-        let id = card.id;
-
-        const img = document.createElement("img")
-        img.setAttribute("src", src);
-        img.setAttribute("class",  `cards maquinaCard maquinaCard${index + 1}`);
+        img.setAttribute("class",  `cards ${this.players[torn]}Card ${this.players[torn]}Card${index + 1}`);
         img.setAttribute("id", `${id}`);
         img.setAttribute("draggable", "true");
         this.parentContainer.appendChild(img);
@@ -92,12 +67,17 @@ export default class Vista{
     }
 
     deleteClassDragOver(){
-        for(let containerPlayer of this.containersPlayer){
-            containerPlayer.classList.remove("drag-over");
+
+        let containers = document.querySelectorAll(`.${this.players[0]}CardsContainer`);
+        for(let container of containers){
+            container.classList.remove("drag-over");
         }
-        for(let containerMaquina of this.containersMaquina){
-            containerMaquina.classList.remove("drag-over");
+
+        containers = document.querySelectorAll(`.${this.players[1]}CardsContainer`);
+        for(let container of containers){
+            container.classList.remove("drag-over");
         }
+
     }
 
     cardDragStart(e){
@@ -118,7 +98,7 @@ export default class Vista{
         let player = e.dataTransfer.getData('player');
         let torn = allFunctions["getTorn"]();
 
-        if(player == torn){
+        if(this.players[torn] == player){
             let id = e.dataTransfer.getData('id');
             let draggable = document.getElementById(id);
             let numberPosition = allFunctions["addCartaTablero"](id, container);
@@ -130,7 +110,7 @@ export default class Vista{
                 else{
                     e.target.appendChild(draggable);
                 }
-                allFunctions["addNewCardDeckPlayer"](player);
+                allFunctions["addNewCardDeckPlayer"]();
                 allFunctions["changeTorn"]();
             }  
         } 
@@ -141,38 +121,32 @@ export default class Vista{
         let player = e.dataTransfer.getData('player');
         let torn = allFunctions["getTorn"]();
 
-        if(player == torn){
+        if(this.players[torn] == player){
             let id = e.dataTransfer.getData('id');
             let draggable = document.getElementById(id);
             this.parentContainer.removeChild(draggable);
-            allFunctions["trashCard"](id, player);
+            allFunctions["trashCard"](id);
             allFunctions["changeTorn"]();
         }
     }
 
-    changeTornView(player, maPlayer, maMaquina){
-        
-        let playerHandCards = document.querySelectorAll(".playerCard");
-        let maquinaHandCards = document.querySelectorAll(".maquinaCard");
+    changeTornView(torn, ma){
 
-        if(player == "player"){
-            for(let handCard of playerHandCards){
-                handCard.src = "/img/cartaRedera.png"
-            }
-
-            for(let i = 0; i < 3; i++){
-                maquinaHandCards[i].src = `/img/${maMaquina[i].color}-${maMaquina[i].tipus}.png`;
-            }
-            
+        for(let handCard of document.querySelectorAll(`.${this.players[torn]}Card`)){
+            handCard.src = "/img/cartaRedera.png";
         }
-        else if(player == "maquina"){
-            for(let handCard of maquinaHandCards){
-                handCard.src = "/img/cartaRedera.png"
-            }
 
-            for(let i = 0; i < 3; i++){
-                playerHandCards[i].src = `/img/${maPlayer[i].color}-${maPlayer[i].tipus}.png`;
-            }
+        if(torn == 0){
+            torn = 1;
         }
+        else if(torn = 1){
+            torn = 0;
+        }
+
+        for(let i = 0; i < 3; i++){
+            let handCard = document.querySelector(`.${this.players[torn]}Card${i + 1}`)
+            handCard.src = `/img/${ma[i].color}-${ma[i].tipus}.png`;
+        }
+
     }
 }
