@@ -130,8 +130,7 @@ export default class Vista{
         }
     }
 
-    changeTornView(torn, ma){
-
+    changeTornView(torn){
         for(let handCard of document.querySelectorAll(`.${this.players[torn]}Card`)){
             handCard.src = "/img/cartaRedera.png";
         }
@@ -139,13 +138,13 @@ export default class Vista{
         if(torn == 0){
             torn = 1;
         }
-        else if(torn = 1){
+        else if (torn == 1){
             torn = 0;
         }
 
         for(let i = 0; i < 3; i++){
             let handCard = document.querySelector(`.${this.players[torn]}Card${i + 1}`)
-            handCard.src = `/img/${ma[i].color}-${ma[i].tipus}.png`;
+            handCard.src = `/img/${handCard.id.split("_")[1]}-${handCard.id.split("_")[0]}.png`;
         }
 
     }

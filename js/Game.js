@@ -45,6 +45,7 @@ export default class Game{
             this.vista.addHandCards(card, i, this.allFunctions, 0);
         }
         
+        
         for(let i = 0; i < 3; i++){
             let card = this.deck.getCard();
             this.players[1].setCardsMaPlayer(card, i);
@@ -64,19 +65,38 @@ export default class Game{
         let torn = this.torn;
         
         
-        // let nameAllTaulersPlayer = this.pl.getNameAllCardsTauler();
-        // let nameAllTaulersMaquina = this.maquina.getNameAllCardsTauler();
-        // let nameAllTaulers = nameAllTaulersPlayer.concat(nameAllTaulersMaquina);
-        // let containersPlayerCards = this.player.getAllCardsTauler();
-        // let containersMaquinaCards = this.maquina.getAllCardsTauler();
+        let nameAllTaulersPlayer = this.players[0].getNameAllCardsTauler();
+        let nameAllTaulersMaquina = this.players[1].getNameAllCardsTauler();
+        let nameAllTaulers = nameAllTaulersPlayer.concat(nameAllTaulersMaquina);
 
         //AQUI ES POSARAN EL NOM DELS CONTENIDORS QUE PINTARAN AL POSAR EL MOUSE SOBRE LA CARTA
 
         let paintContainers = [];
 
-        // if(tipus == "organ"){
-            
-        // }
+        
+        if(tipus == "organ"){
+
+            let valColorOrgan = false;
+            let containersName = this.players[this.torn].getNameAllCardsTauler();
+
+            for(let nameContainer of containersName){
+
+                let cardsTauler = this.players[this.torn].getCardsTauler(nameContainer);
+
+                if(cardsTauler.length == 0){
+                    paintContainers.push(nameContainer);
+                }
+                else{
+                    if(cardsTauler[0].color == color){
+                        valColorOrgan = true;     
+                    }
+                }         
+            }
+
+            if(valColorOrgan){
+                paintContainers = [];
+            }
+        }
         
         this.vista.addClassDragOverContainers(paintContainers);
         this.vista.addClassDragOverContainers(paintContainers);
