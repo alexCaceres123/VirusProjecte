@@ -43,7 +43,9 @@ export default class Player{
     }
 
     setCardTauler(card, tauler){
-        this.cardsTaulerPlayer[tauler].push(card);
+        let indx = this.getNumCartesTauler(tauler);
+        this.cardsTaulerPlayer[tauler][indx] = card;
+        console.log(this.cardsTaulerPlayer[tauler]);
     }
 
     deleteCardMaPlayer(idCard){
@@ -54,6 +56,26 @@ export default class Player{
         }
     }
 
+    deleteCardsTablero(nameContainer, card){
+
+        for(let i = 0; i < this.cardsTaulerPlayer[nameContainer].length; i++){
+            if(card.id == this.cardsTaulerPlayer[nameContainer][i].id){
+                this.cardsTaulerPlayer[nameContainer][i] = "";
+            }
+        }
+
+        console.log(this.cardsTaulerPlayer[nameContainer]);
+
+    }
+
+    deleteAllCardsTablero(nameContainer){
+
+        for(let i = 0; i < this.cardsTaulerPlayer[nameContainer].length; i++){
+            this.cardsTaulerPlayer[nameContainer][i] = "";
+        }
+
+    }
+
     getCardXId(idCard){
         for(let i = 0; i < this.cardsMaPlayer.length; i++){
             if(this.cardsMaPlayer[i].id == idCard){
@@ -61,4 +83,19 @@ export default class Player{
             }
         }
     }
+
+    getNumCartesTauler(nameContainer){
+        let num = 0;
+
+        for(let i = 0; i < this.cardsTaulerPlayer[nameContainer].length; i++){
+            
+            if(this.cardsTaulerPlayer[nameContainer][i] != ""){
+                num++;
+            }
+    
+        }
+
+        return num;
+    }
+
 }

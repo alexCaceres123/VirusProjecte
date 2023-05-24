@@ -47,7 +47,7 @@ export default class Vista{
         img.addEventListener("dragstart", this.cardDragStart)
 
         img.addEventListener("mouseover", () => {
-            allFunctions["onPosarCarta"](img, true);
+            allFunctions["onPosarCarta"](img, true, this.players[torn]);
         });
 
         img.addEventListener('mouseout', () => {
@@ -95,23 +95,33 @@ export default class Vista{
     }
 
     drop(e, container, allFunctions){
+
         let player = e.dataTransfer.getData('player');
         let torn = allFunctions["getTorn"]();
 
         if(this.players[torn] == player){
+
             let id = e.dataTransfer.getData('id');
             let draggable = document.getElementById(id);
-            let numberPosition = allFunctions["addCartaTablero"](id, container);
+            let numberPosition = allFunctions["addCartaTablero"](id, container, this.players[torn]);
+            
             if(numberPosition){
-                draggable.classList = `cardDentroTablero${numberPosition - 1}`
+                draggable.classList = `cardDentroTablero${numberPosition - 1}`;
+                
                 if(e.target instanceof HTMLImageElement){
+
                     e.target.parentNode.appendChild(draggable);
+
                 }
                 else{
+
                     e.target.appendChild(draggable);
+
                 }
+
                 allFunctions["addNewCardDeckPlayer"]();
                 allFunctions["changeTorn"]();
+
             }  
         } 
     }
@@ -145,6 +155,24 @@ export default class Vista{
         for(let i = 0; i < 3; i++){
             let handCard = document.querySelector(`.${this.players[torn]}Card${i + 1}`)
             handCard.src = `/img/${handCard.id.split("_")[1]}-${handCard.id.split("_")[0]}.png`;
+        }
+
+    }
+
+    deleteCardsTablero(card){
+        
+        let idCard = card.id;
+        let deleteCard = document.getElementById(idCard);
+        deleteCard.parentNode.removeChild(deleteCard);
+
+    }
+
+    deleteAllCardsTablero(cardsDelete){
+
+        for(let card of cardsDelete){
+            let idCard = card.id
+            let deleteCard = document.getElementById(idCard);
+            deleteCard.parentNode.removeChild(deleteCard);
         }
 
     }
