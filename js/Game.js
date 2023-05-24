@@ -56,14 +56,18 @@ export default class Game{
         this.vista.disableButtonStartGame();
     }
 
-    onPosarCarta(card){
+    onPosarCarta(card, dragVal){
     
-        //Falta posar les condicions de on posar les cartes
+        let tipus;
+        let color;
 
-        let tipus = card.id.split("_")[0];
-        let color = card.id.split("_")[1];        
-        let torn = this.torn;
-        
+        if(dragVal){
+            tipus = card.id.split("_")[0];
+            color = card.id.split("_")[1]; 
+        }else{
+            tipus = card.split("_")[0];
+            color = card.split("_")[1]; 
+        }
         
         let nameAllTaulersPlayer = this.players[0].getNameAllCardsTauler();
         let nameAllTaulersMaquina = this.players[1].getNameAllCardsTauler();
@@ -98,8 +102,13 @@ export default class Game{
             }
         }
         
-        this.vista.addClassDragOverContainers(paintContainers);
-        this.vista.addClassDragOverContainers(paintContainers);
+        if(dragVal){
+            this.vista.addClassDragOverContainers(paintContainers);
+            this.vista.addClassDragOverContainers(paintContainers);
+        }
+        else{
+            return paintContainers;
+        }
 
     }
     
@@ -111,22 +120,25 @@ export default class Game{
 
             let cartaReal = []
 
-            //AQUI ES TREU LA CARTA DEL JUGADOR A TRAVÉS DEL TORN JA QUE SI ALGU TIRA UNA CARTA SABRE QUI ES PER EL TORN
+            let validContainers = this.onPosarCarta(card, false);
+
+            if(validContainers.indexOf(nameContainer) !== -1) {
+
+                //AQUI ES TREU LA CARTA DEL JUGADOR A TRAVÉS DEL TORN JA QUE SI ALGU TIRA UNA CARTA SABRE QUI ES PER EL TORN
             
-            cartaReal = this.players[this.torn].getCardXId(card);
-            this.players[this.torn].deleteCardMaPlayer(card);
+                cartaReal = this.players[this.torn].getCardXId(card);
+                this.players[this.torn].deleteCardMaPlayer(card);
 
-            //AFEGEIXO LA CARTAREAL AL CONTENIDOR INDICAT
-            
-            //if(x.indexOf(nameContainer.split("C")[0]) !== -1) afegir carta;
+                //AFEGEIXO LA CARTAREAL AL CONTENIDOR INDICAT
 
+                this.players[this.torn].setCardTauler(cartaReal, nameContainer)
+                numCartesContainer = this.players[this.torn].getCardsTauler(nameContainer);
 
-            this.players[this.torn].setCardTauler(cartaReal, nameContainer)
-            numCartesContainer = this.players[this.torn].getCardsTauler(nameContainer);
+                //RETURN PER SABER ON POSAR LA CARTA A LA VISTA
 
-            //RETURN PER SABER ON POSAR LA CARTA A LA VISTA
+                return numCartesContainer.length;
 
-            return numCartesContainer.length;
+            }
 
         }
     }

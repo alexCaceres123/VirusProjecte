@@ -47,7 +47,7 @@ export default class Vista{
         img.addEventListener("dragstart", this.cardDragStart)
 
         img.addEventListener("mouseover", () => {
-            allFunctions["onPosarCarta"](img);
+            allFunctions["onPosarCarta"](img, true);
         });
 
         img.addEventListener('mouseout', () => {
