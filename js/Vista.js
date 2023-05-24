@@ -1,15 +1,22 @@
 export default class Vista{
     constructor(){
         this.buttonStartGame = document.querySelector(".startGame");
+        this.buttonAcabarTorn = document.querySelector(".acabarTorn");
         this.allhandCards = document.querySelectorAll(".cards");
         this.allContainers = document.querySelectorAll(".cardsContainer");
         this.parentContainer = document.querySelector(".container");
         this.trash = document.querySelector(".trash");
         this.players = ["player", "maquina"];
+        this.changeTornContador = 0;
     }
 
     listenners(allFunctions){
         this.buttonStartGame.addEventListener("click", allFunctions["startGame"]);
+        this.buttonAcabarTorn.addEventListener("click", function(){
+            this.changeTornContador = 0;
+            allFunctions["changeTorn"]();
+        });
+
 
         this.allContainers.forEach(container => {
 
@@ -57,6 +64,7 @@ export default class Vista{
 
     disableButtonStartGame(){
         this.buttonStartGame.style.display = "none";
+        this.buttonAcabarTorn.style.display = "block";
     }
 
     addClassDragOverContainers(containers){
@@ -132,11 +140,16 @@ export default class Vista{
         let torn = allFunctions["getTorn"]();
 
         if(this.players[torn] == player){
+            this.changeTornContador++;
             let id = e.dataTransfer.getData('id');
             let draggable = document.getElementById(id);
             this.parentContainer.removeChild(draggable);
             allFunctions["trashCard"](id);
-            allFunctions["changeTorn"]();
+
+            if(this.changeTornContador == 3){
+                this.changeTornContador = 0;
+                allFunctions["changeTorn"]();
+            }
         }
     }
 

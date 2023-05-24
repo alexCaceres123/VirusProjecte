@@ -21,8 +21,7 @@ export default class Game{
     }
 
     changeTorn(){
-        let ma = this.players[this.torn].getCardsMaPlayer();
-        this.vista.changeTornView(this.torn, ma);
+        this.vista.changeTornView(this.torn);
 
         if(this.torn == 0){
             this.torn = 1;
