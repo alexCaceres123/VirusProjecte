@@ -3,6 +3,7 @@ export default class Player{
         this.cardsMaPlayer = [];
         this.name = name;
         this.cardsTaulerPlayer = this.createTaulersObject();
+        this.taulersImonitzats = [];
     }
 
     createTaulersObject(){
@@ -45,7 +46,6 @@ export default class Player{
     setCardTauler(card, tauler){
         let indx = this.getNumCartesTauler(tauler);
         this.cardsTaulerPlayer[tauler][indx] = card;
-        console.log(this.cardsTaulerPlayer[tauler]);
     }
 
     deleteCardMaPlayer(idCard){
@@ -63,9 +63,6 @@ export default class Player{
                 this.cardsTaulerPlayer[nameContainer][i] = "";
             }
         }
-
-        console.log(this.cardsTaulerPlayer[nameContainer]);
-
     }
 
     deleteAllCardsTablero(nameContainer){
@@ -96,6 +93,14 @@ export default class Player{
         }
 
         return num;
+    }
+
+    addTaulerImonitzat(container){
+        this.taulersImonitzats.push(container);
+    }
+
+    getTaulersInmonitzats(){
+        return this.taulersImonitzats;
     }
 
 }

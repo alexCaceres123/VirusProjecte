@@ -85,11 +85,16 @@ export default class Game{
             let paintContainers = [];
             
             if(tipus == "organ"){
+
                 let valColorOrgan = false;
                 let containersName = this.players[this.torn].getNameAllCardsTauler();
+
                 for(let nameContainer of containersName){
+
                     let cardsTauler = this.players[this.torn].getCardsTauler(nameContainer);
-                    if(cardsTauler.length == 0){
+                    let lenghtContainer = this.players[this.torn].getNumCartesTauler(nameContainer);
+                    
+                    if(lenghtContainer == 0){
                         paintContainers.push(nameContainer);
                     }
                     else{
@@ -98,9 +103,11 @@ export default class Game{
                         }
                     }         
                 }
+
                 if(valColorOrgan){
                     paintContainers = [];
                 }
+
             }
 
             let tornEnemig = this.getTornCambiat(this.torn);
@@ -110,14 +117,11 @@ export default class Game{
                 let containersName = this.players[tornEnemig].getNameAllCardsTauler();
 
                 for(let nameContainer of containersName){
+
                     let cardsTauler = this.players[tornEnemig].getCardsTauler(nameContainer);
+                    let lenghtContainer = this.players[tornEnemig].getNumCartesTauler(nameContainer);
 
-
-                    //CAMBIAR LO DEL LENGHTS AIXO NO VA
-
-                    if(cardsTauler.length != 0){
-
-                        let lenghtContainer = this.players[tornEnemig].getNumCartesTauler(nameContainer);
+                    if(lenghtContainer != 0){
 
                         if(cardsTauler[lenghtContainer - 1].color == color){
                             paintContainers.push(nameContainer);
@@ -139,12 +143,9 @@ export default class Game{
                 for(let nameContainer of containersName){
 
                     let cardsTauler = this.players[this.torn].getCardsTauler(nameContainer);
+                    let lenghtContainer = this.players[this.torn].getNumCartesTauler(nameContainer);
 
-                    //CAMBIAR LO DEL LENGHTS AIXO NO VA
-
-                    if(cardsTauler.length != 0){
-
-                        let lenghtContainer = this.players[this.torn].getNumCartesTauler(nameContainer);
+                    if(lenghtContainer != 0){
 
                         if(cardsTauler[lenghtContainer - 1].color == color){
                             paintContainers.push(nameContainer);
@@ -159,6 +160,19 @@ export default class Game{
 
             }
 
+            for(let i = 0; i < this.players.length; i++){
+                let taulersInmonitzats = this.players[i].getTaulersInmonitzats();
+
+                for(let j = 0; j < taulersInmonitzats.length; j++){
+                    
+                    if(paintContainers.indexOf(taulersInmonitzats[j]) !== -1){
+
+                        let indx = paintContainers.indexOf(taulersInmonitzats[j]);
+                        paintContainers.splice(indx, 1);
+
+                    }
+                }
+            }
 
             if(dragVal){
                 this.vista.addClassDragOverContainers(paintContainers);
@@ -185,10 +199,6 @@ export default class Game{
                 //AQUI ES TREU LA CARTA DEL JUGADOR A TRAVÉS DEL TORN JA QUE SI ALGU TIRA UNA CARTA SABRE QUI ES PER EL TORN
             
                 cartaReal = this.players[this.torn].getCardXId(card);
-
-                console.log("Id Carta--> ", card);
-                console.log("Carta Real--> ", this.players[this.torn].getCardXId(card));
-                console.log("Ma jugador--> ", this.players[this.torn].getCardsMaPlayer());
                 
                 //AFEGEIXO LA CARTAREAL AL CONTENIDOR INDICAT
 
@@ -238,6 +248,7 @@ export default class Game{
         if(cardsTauler.length == 2){
 
             if(cardsTauler[1].tipus == "medicina" && card.tipus == "medicina"){
+                this.players[jugador].addTaulerImonitzat(nameContainer);
                 return true;
             }
 
