@@ -79,14 +79,9 @@ export default class Game{
             color = card.split("_")[1]; 
         }
         
-        let nameAllTaulersPlayer = this.players[0].getNameAllCardsTauler();
-        let nameAllTaulersMaquina = this.players[1].getNameAllCardsTauler();
-        let nameAllTaulers = nameAllTaulersPlayer.concat(nameAllTaulersMaquina);
-
         //AQUI ES POSARAN EL NOM DELS CONTENIDORS QUE PINTARAN AL POSAR EL MOUSE SOBRE LA CARTA
 
         let paintContainers = [];
-
         
         if(tipus == "organ"){
             let valColorOrgan = false;
@@ -119,10 +114,33 @@ export default class Game{
 
                 if(cardsTauler.length != 0){
                     
-                    if(cardsTauler[cardsTauler.length - 1].color == color && cardsTauler[cardsTauler.length - 1].tipus != "medicina"){
+                    if(cardsTauler[cardsTauler.length - 1].color == color){
                         paintContainers.push(nameContainer);
                     }
-                    else if(cardsTauler[cardsTauler.length - 1].tipus != "medicina" && color == "mcolor"){
+                    else if(color == "mcolor" || cardsTauler[cardsTauler.length - 1].color == "mcolor"){
+                        paintContainers.push(nameContainer);
+                    }
+
+                }
+
+            }
+
+        }
+
+        if(tipus == "medicina"){
+
+            let containersName = this.players[this.torn].getNameAllCardsTauler();
+
+            for(let nameContainer of containersName){
+
+                let cardsTauler = this.players[this.torn].getCardsTauler(nameContainer);
+
+                if(cardsTauler.length != 0){
+
+                    if(cardsTauler[cardsTauler.length - 1].color == color){
+                        paintContainers.push(nameContainer);
+                    }
+                    else if(color == "mcolor" || cardsTauler[0].color == "mcolor" || cardsTauler[0].color == color){
                         paintContainers.push(nameContainer);
                     }
 
