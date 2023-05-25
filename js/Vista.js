@@ -6,14 +6,15 @@ export default class Vista{
         this.allContainers = document.querySelectorAll(".cardsContainer");
         this.parentContainer = document.querySelector(".container");
         this.trash = document.querySelector(".trash");
+        this.winner = document.querySelector(".winner");
+        this.labelWinner = document.querySelector(".winnerP");
         this.players = ["player", "maquina"];
-        this.changeTornContador = 0;
     }
 
     listenners(allFunctions){
         this.buttonStartGame.addEventListener("click", allFunctions["startGame"]);
+
         this.buttonAcabarTorn.addEventListener("click", function(){
-            this.changeTornContador = 0;
             allFunctions["changeTorn"]();
         });
 
@@ -44,7 +45,7 @@ export default class Vista{
         let src = `/img/${card.color}-${card.tipus}.png`;
         let id = card.id;
 
-        const img = document.createElement("img")
+        const img = document.createElement("img");
         img.setAttribute("src", src);
         img.setAttribute("class",  `cards ${this.players[torn]}Card ${this.players[torn]}Card${index + 1}`);
         img.setAttribute("id", `${id}`);
@@ -127,11 +128,21 @@ export default class Vista{
 
                 }
 
-                allFunctions["addNewCardDeckPlayer"]();
-                allFunctions["changeTorn"]();
+                let winner = allFunctions["checkWinnerGame"]();
 
+                if(winner == false){
+                    allFunctions["addNewCardDeckPlayer"]();
+                    allFunctions["changeTorn"]();
+                }else{
+                    this.finishGame(winner)
+                }
             }  
         } 
+    }
+
+    finishGame(nameWinner){
+        this.winner.style.display = "block";
+        this.labelWinner.innerHTML = `${nameWinner.toUpperCase()} GUANYA!`;
     }
 
 
@@ -140,16 +151,12 @@ export default class Vista{
         let torn = allFunctions["getTorn"]();
 
         if(this.players[torn] == player){
-            this.changeTornContador++;
+
             let id = e.dataTransfer.getData('id');
             let draggable = document.getElementById(id);
             this.parentContainer.removeChild(draggable);
             allFunctions["trashCard"](id);
 
-            if(this.changeTornContador == 3){
-                this.changeTornContador = 0;
-                allFunctions["changeTorn"]();
-            }
         }
     }
 

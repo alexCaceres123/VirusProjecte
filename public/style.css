@@ -206,4 +206,19 @@ body{
     cursor: pointer;
 }
 
+.winner{
+    position: absolute;
+    background-color:#4945b3;
+    color: white;
+    font-weight: bold;
+    font-size: 4vw;
+    border-radius: 10px;
+    padding: 1vh;
+    text-align: center;
+    z-index: 2;
+    left: 37vw;
+    top: 20vw;
+    display: none;
+}
+
 

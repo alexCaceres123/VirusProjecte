@@ -11,9 +11,11 @@ export default class Game{
             "addNewCardDeckPlayer" : this.addNewCardDeckPlayer.bind(this),
             "trashCard" : this.trashCard.bind(this),
             "changeTorn" : this.changeTorn.bind(this),
-            "getTorn" : this.getTorn.bind(this)
+            "getTorn" : this.getTorn.bind(this),
+            "checkWinnerGame" : this.checkWinnerGame.bind(this)
         }
         this.eventListeners()
+        this.changeValTorn = 0;
     }
 
     eventListeners(){
@@ -21,6 +23,7 @@ export default class Game{
     }
 
     changeTorn(){
+        this.changeValTorn = 0;
         this.vista.changeTornView(this.torn);
 
         if(this.torn == 0){
@@ -67,7 +70,7 @@ export default class Game{
 
     onPosarCarta(card, dragVal, namePlayer){
     
-        if(namePlayer == this.players[this.torn].name){
+        if(namePlayer == this.players[this.torn].name && this.changeValTorn == 0){
             let tipus;
             let color;
 
@@ -223,13 +226,14 @@ export default class Game{
 
                     //RETURN PER SABER ON POSAR LA CARTA A LA VISTA
 
+                    this.changeValTorn = 0;
                     return numCartesContainer;
 
                 }else{
+                    this.changeValTorn = 0;
                     this.changeTorn();
                     
                 }
-
             }
         }
     }
@@ -290,6 +294,7 @@ export default class Game{
 
     trashCard(idCard){
 
+
         let tipus = idCard.split("_")[0];
         let color = idCard.split("_")[1];
         let number = idCard.split("_")[2];
@@ -299,6 +304,35 @@ export default class Game{
         this.players[this.torn].deleteCardMaPlayer(card.id)
 
         this.addNewCardDeckPlayer();
+        this.changeValTorn++;
+
+        if(this.changeValTorn == 3){
+            this.changeTorn();
+        }
+    }
+
+    checkWinnerGame(){
+        let containersName = this.players[this.torn].getNameAllCardsTauler();
+
+        let winVal = 0;
+
+        for(let container of containersName){
+            let cards = this.players[this.torn].getCardsTauler(container);
+
+            if(cards[0] != undefined && cards[0] != ""){
+                if(cards[1] != undefined && cards[1] != ""){
+                    if(cards[0].tipus == "organ" && cards[1].tipus != "virus"){
+                        winVal++;
+                    }
+                }    
+            }
+        }
+
+        if(winVal == 4){
+            return this.players[this.torn].name;
+        }else{
+            return false;
+        }
     }
 
 }
