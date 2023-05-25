@@ -188,9 +188,9 @@ export default class Game{
     }
     
     addCartaTablero(card, container, namePlayer){
+        let numCartesContainer = -1;
         if(card != ""){
             let nameContainer = container.className.split(" ")[2];
-            let numCartesContainer = [];
 
             let cartaReal = []
 
@@ -227,15 +227,10 @@ export default class Game{
                     //RETURN PER SABER ON POSAR LA CARTA A LA VISTA
 
                     this.changeValTorn = 0;
-                    return numCartesContainer;
-
-                }else{
-                    this.changeValTorn = 0;
-                    this.changeTorn();
-                    
                 }
             }
         }
+        return numCartesContainer;
     }
 
     checkTablero(card, nameContainer){
@@ -321,10 +316,12 @@ export default class Game{
 
             if(cards[0] != undefined && cards[0] != ""){
                 if(cards[1] != undefined && cards[1] != ""){
-                    if(cards[0].tipus == "organ" && cards[1].tipus != "virus"){
+                    if(cards[1].tipus != "virus"){
                         winVal++;
                     }
-                }    
+                }else{
+                    winVal++;
+                } 
             }
         }
 
