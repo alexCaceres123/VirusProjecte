@@ -114,7 +114,7 @@ export default class Vista{
             let draggable = document.getElementById(id);
             let numberPosition = allFunctions["addCartaTablero"](id, container, this.players[torn]);
             
-            if(numberPosition != -1){
+            if(numberPosition != -1 && numberPosition != -2){
                 draggable.classList = `cardDentroTablero${numberPosition - 1}`;
                 
                 if(e.target instanceof HTMLImageElement){
@@ -131,9 +131,12 @@ export default class Vista{
 
             let winner = allFunctions["checkWinnerGame"]();
 
+            console.log(numberPosition);
             if(winner == false){
-                allFunctions["addNewCardDeckPlayer"]();
-                allFunctions["changeTorn"]();
+                if(numberPosition != -2){
+                    allFunctions["addNewCardDeckPlayer"]();
+                    allFunctions["changeTorn"]();
+                }
             }else{
                 this.finishGame(winner)
             }  

@@ -229,6 +229,9 @@ export default class Game{
                     this.changeValTorn = 0;
                 }
             }
+            else{
+                numCartesContainer = -2;
+            }
         }
         return numCartesContainer;
     }
