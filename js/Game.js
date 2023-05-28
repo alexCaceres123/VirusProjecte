@@ -1,4 +1,14 @@
+/**
+ * Classe Game
+ */
 export default class Game {
+  /**
+   * Constructor
+   * @param {Deck} deck
+   * @param {Player} player1
+   * @param {Player} player2
+   * @param {Vista} vista
+   */
   constructor(deck, player1, player2, vista) {
     this.deck = deck;
     this.players = [player1, player2];
@@ -13,25 +23,30 @@ export default class Game {
       'changeTorn': this.changeTorn.bind(this),
       'getTorn': this.getTorn.bind(this),
       'checkWinnerGame': this.checkWinnerGame.bind(this),
-      'modeJugador': this.modeJugador.bind(this)
+      'modeJugador': this.modeJugador.bind(this),
     };
     this.eventListeners();
     this.changeValTorn = 0;
-    this.gameMode = "";
+    this.gameMode = '';
   }
 
   /**
-   * s
+   * Funcio encarregada de inicialitzar els addEventListeners de vista
    */
   eventListeners() {
     this.vista.listenners(this.allFunctions);
   }
-
+  /**
+   * Funció per posar el game mode del joc
+   * @param {String} mode
+   */
   modeJugador(mode) {
-    this.gameMode = mode
+    this.gameMode = mode;
     this.vista.disableAlert();
   }
-
+  /**
+   * Funció encarregada de cambiar el torn i fer jugar la maquina si el game mode es maquina
+   */
   changeTorn() {
     this.changeValTorn = 0;
     this.vista.changeTornView(this.torn);
@@ -39,59 +54,55 @@ export default class Game {
     if (this.torn == 0) {
       this.torn = 1;
 
-      if(this.gameMode == "maquina"){
+      if (this.gameMode == 'maquina') {
         this.maquinaPlays();
       }
-
-    } 
-    else if (this.torn == 1) {
+    } else if (this.torn == 1) {
       this.torn = 0;
     }
   }
+  /**
+   * Funció encarregada de fer jugar la maquina automaticament
+   */
+  maquinaPlays() {
+    const cartesMaquina = this.players[1].getCardsMaPlayer();
 
-  maquinaPlays(){
-    let cartesMaquina = this.players[1].getCardsMaPlayer();
-    
-    let possibleContainers = []
+    const possibleContainers = [];
 
-    for(let i = 0; i < 3; i++){
-      let cartId = cartesMaquina[i].id;
-      let containers = this.onPosarCarta(cartId, false, "maquina");
-      
-      let CartRandomNumber=Math.floor(Math.random()*containers.length-1)+1;
-      let containerName = containers[CartRandomNumber];
+    for (let i = 0; i < 3; i++) {
+      const cartId = cartesMaquina[i].id;
+      const containers = this.onPosarCarta(cartId, false, 'maquina');
+
+      const CartRandomNumber=Math.floor(Math.random()*containers.length-1)+1;
+      const containerName = containers[CartRandomNumber];
       possibleContainers.push([cartId, containerName]);
-
     }
 
     // Trec les possibilitats Undefined
-    let realPossibilities = [];
+    const realPossibilities = [];
 
-    for(let i = 0; i < possibleContainers.length; i++){
-      if(possibleContainers[i][1] != undefined){
-        realPossibilities.push(possibleContainers[i])
+    for (let i = 0; i < possibleContainers.length; i++) {
+      if (possibleContainers[i][1] != undefined) {
+        realPossibilities.push(possibleContainers[i]);
       }
     }
-    
-    if(realPossibilities.length != 0){
-      let random = Math.floor(Math.random()*realPossibilities.length-1)+1
-      let pushContainer = realPossibilities[random];
+
+    if (realPossibilities.length != 0) {
+      const random = Math.floor(Math.random()*realPossibilities.length-1)+1;
+      const pushContainer = realPossibilities[random];
       console.log(pushContainer);
-      let posCard = this.automaticAddCartaTablero(pushContainer[0], pushContainer[1])
+      const posCard = this.automaticAddCartaTablero(pushContainer[0], pushContainer[1]);
       this.vista.automaticAddCardMaquina(pushContainer[0], pushContainer[1], posCard);
 
-      let winner = this.checkWinnerGame();
+      const winner = this.checkWinnerGame();
 
-      if(winner == false){
-        this.addNewCardDeckPlayer();          
+      if (winner == false) {
+        this.addNewCardDeckPlayer();
+      } else {
+        this.vista.finishGame(winner);
       }
-      else{
-        this.vista.finishGame(winner)
-      }  
-    }
-    else{
-
-      for(let i = 0; i < 3; i++){
+    } else {
+      for (let i = 0; i < 3; i++) {
         console.log(cartesMaquina[i].id);
         this.automaticTrashCard(cartesMaquina[i].id);
       }
@@ -101,17 +112,22 @@ export default class Game {
         this.players[1].setCardsMaPlayer(card, i);
         this.vista.addHandCards(card, i, this.allFunctions, 1, this.gameMode);
       }
-      
     }
 
-    this.changeTorn();    
-
+    this.changeTorn();
   }
-
+  /**
+   * Funció per sabe el torn acutal
+   * @return {int}
+   */
   getTorn() {
     return this.torn;
   }
-
+  /**
+   * Funció per saber el torn contrari
+   * @param {int} torn
+   * @return {int}
+   */
   getTornCambiat(torn) {
     if (torn == 0) {
       torn = 1;
@@ -120,7 +136,9 @@ export default class Game {
     }
     return torn;
   }
-
+  /**
+   * Funció que començara el joc
+   */
   startGame() {
     this.deck.createDeck();
 
@@ -140,7 +158,13 @@ export default class Game {
     this.changeTorn();
     this.vista.disableButtonStartGame();
   }
-
+  /**
+   * Funció que retornara els contenidors que pot anar una carta
+   * @param {card} card
+   * @param {boolean} dragVal
+   * @param {String} namePlayer
+   * @return {[]}
+   */
   onPosarCarta(card, dragVal, namePlayer) {
     if (namePlayer == this.players[this.torn].name && this.changeValTorn == 0) {
       let tipus;
@@ -235,20 +259,24 @@ export default class Game {
       }
     }
   }
-
-  automaticAddCartaTablero(card, nameContainer){
+  /**
+   * Funció que posa la carta al contenidor seleccionat automaticament per la maquina
+   * @param {String} card
+   * @param {String} nameContainer
+   * @return {int}
+   */
+  automaticAddCartaTablero(card, nameContainer) {
     let posicioCarta = -1;
-    let cartaReal = this.players[1].getCardXId(card);
-    let checkPosar = this.checkTablero(cartaReal, nameContainer);
+    const cartaReal = this.players[1].getCardXId(card);
+    const checkPosar = this.checkTablero(cartaReal, nameContainer);
 
-    if(checkPosar){
+    if (checkPosar) {
       this.players[1].deleteCardMaPlayer(card);
 
       if (this.players[1].name == nameContainer.split('C')[0]) {
         this.players[1].setCardTauler(cartaReal, nameContainer);
         posicioCarta = this.players[1].getNumCartesTauler(nameContainer);
-      } 
-      else {
+      } else {
         this.players[0].setCardTauler(cartaReal, nameContainer);
         posicioCarta = this.players[0].getNumCartesTauler(nameContainer);
       }
@@ -256,7 +284,13 @@ export default class Game {
 
     return posicioCarta;
   }
-
+  /**
+   * Funció per afegir una carta al tablero
+   * @param {String} card
+   * @param {String} container
+   * @param {String} namePlayer
+   * @return {int}
+   */
   addCartaTablero(card, container, namePlayer) {
     let numCartesContainer = -1;
     if (card != '') {
@@ -297,7 +331,12 @@ export default class Game {
     }
     return numCartesContainer;
   }
-
+  /**
+   * Funció s'encarregara de saber la logica al afegir una carta a una altre
+   * @param {card} card
+   * @param {String} nameContainer
+   * @return {boolean}
+   */
   checkTablero(card, nameContainer) {
     let jugador = this.torn;
 
@@ -334,7 +373,9 @@ export default class Game {
 
     return true;
   }
-
+  /**
+   * Funció encarregada de afegir una nova carta al jugador
+   */
   addNewCardDeckPlayer() {
     const card = this.deck.getCard();
 
@@ -346,7 +387,10 @@ export default class Game {
       }
     }
   }
-
+  /**
+   * Funció que borrara de l'array del jugador la carta descartada
+   * @param {String} idCard
+   */
   trashCard(idCard) {
     const tipus = idCard.split('_')[0];
     const color = idCard.split('_')[1];
@@ -363,8 +407,11 @@ export default class Game {
       this.changeTorn();
     }
   }
-
-  automaticTrashCard(idCard){
+  /**
+   * Funció que borrara automaticament de la ma de maquina una carta
+   * @param {String} idCard
+   */
+  automaticTrashCard(idCard) {
     const tipus = idCard.split('_')[0];
     const color = idCard.split('_')[1];
     const number = idCard.split('_')[2];
@@ -372,7 +419,10 @@ export default class Game {
     this.deck.setCard(card);
     this.players[1].deleteCardMaPlayer(card.id);
   }
-
+  /**
+   * Funció que mirara si algu ha guanyat
+   * @return {boolean}
+   */
   checkWinnerGame() {
     const containersName = this.players[this.torn].getNameAllCardsTauler();
 

@@ -1,10 +1,10 @@
-import Deck from "./Deck.js";
-import Game from "./Game.js";
-import Player from "./Player.js";
-import Vista from "./Vista.js";
+import Deck from './Deck.js';
+import Game from './Game.js';
+import Player from './Player.js';
+import Vista from './Vista.js';
 
-let deck = new Deck();
-let player = new Player("player");
-let maquina = new Player("maquina");
-let vista = new Vista();
-let game = new Game(deck, player, maquina, vista);
+const deck = new Deck();
+const player = new Player('player');
+const maquina = new Player('maquina');
+const vista = new Vista();
+new Game(deck, player, maquina, vista);

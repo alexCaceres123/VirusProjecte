@@ -1,7 +1,16 @@
+/**
+ * Class Card
+ */
 export default class Card {
-    constructor(tipus, color, number) {
-      this.tipus = tipus;
-      this.color = color;
-      this.id = `${tipus}_${color}_${number}`
-    }
+  /**
+   * Constructor
+   * @param {String} tipus
+   * @param {String} color
+   * @param {int} number
+   */
+  constructor(tipus, color, number) {
+    this.tipus = tipus;
+    this.color = color;
+    this.id = `${tipus}_${color}_${number}`;
+  }
 }
