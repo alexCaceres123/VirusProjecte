@@ -221,4 +221,73 @@ body{
     display: none;
 }
 
+#GameModeDiv{
+    position: absolute;
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.534);
+    width:100vw;
+    height:100vh; 
+    z-index: 2;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.alertMode{
+    display: flex;
+    justify-content:space-around;
+    flex-direction: column;
+    width: 40vw;
+    height:60vh;
+    background-color: white; 
+    z-index: 3;
+    border-radius: 3%;
+    padding: 1%;
+    animation-name: moveFromOutside;
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes moveFromOutside {
+    from {
+      transform: translateY(-600px);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+.explicacio{
+    text-align: center;
+    font-size: 2.4vh;
+    font-family: "Calibri";
+}
+
+.buttonsMode{
+    display: flex;
+    justify-content: space-around;
+}
+
+.buttonM{
+    background-color:#82c8ba;
+    padding: 2%;
+    border-radius: 5px;
+    font-weight: bold;
+    color: white;
+}
+
+
+.buttonM:hover{
+    background-color:#5DADE2;
+    cursor: pointer;
+}
+
+.titleMode{
+    text-align: center;
+    font-size: 5vh;
+}
+
+
+
+
 

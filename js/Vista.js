@@ -9,10 +9,22 @@ export default class Vista{
         this.winner = document.querySelector(".winner");
         this.labelWinner = document.querySelector(".winnerP");
         this.players = ["player", "maquina"];
+        this.alert = document.getElementById("GameModeDiv");
+        this.buttonOnevsOne = document.querySelector(".onePlayerMode");
+        this.buttonMaquinavsOne = document.querySelector(".maquinaMode");
+
     }
 
     listenners(allFunctions){
         this.buttonStartGame.addEventListener("click", allFunctions["startGame"]);
+
+        this.buttonOnevsOne.addEventListener("click", function(){
+            allFunctions["modeJugador"]("jugador");
+        });
+        this.buttonMaquinavsOne.addEventListener("click", function(){
+            allFunctions["modeJugador"]("maquina");
+        });
+
 
         this.buttonAcabarTorn.addEventListener("click", function(){
             allFunctions["changeTorn"]();
@@ -198,5 +210,9 @@ export default class Vista{
             deleteCard.parentNode.removeChild(deleteCard);
         }
 
+    }
+
+    disableAlert(){
+        this.alert.style.display = "none";
     }
 }
