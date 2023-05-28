@@ -29,7 +29,6 @@ export default class Game {
 
   modeJugador(mode) {
     this.gameMode = mode
-    console.log(this.gameMode);
     this.vista.disableAlert();
   }
 
@@ -39,9 +38,64 @@ export default class Game {
 
     if (this.torn == 0) {
       this.torn = 1;
-    } else if (this.torn == 1) {
+
+      if(this.gameMode == "maquina"){
+        this.maquinaPlays();
+      }
+
+    } 
+    else if (this.torn == 1) {
       this.torn = 0;
     }
+  }
+
+  maquinaPlays(){
+    let cartesMaquina = this.players[1].getCardsMaPlayer();
+    
+    let possibleContainers = []
+
+    for(let i = 0; i < 3; i++){
+      let cartId = cartesMaquina[i].id;
+      let containers = this.onPosarCarta(cartId, false, "maquina");
+      
+      let CartRandomNumber=Math.floor(Math.random()*containers.length-1)+1;
+      let containerName = containers[CartRandomNumber];
+      possibleContainers.push([cartId, containerName]);
+
+    }
+
+    // Trec les possibilitats Undefined
+    let realPossibilities = [];
+
+    for(let i = 0; i < possibleContainers.length; i++){
+      if(possibleContainers[i][1] != undefined){
+        realPossibilities.push(possibleContainers[i])
+      }
+    }
+    
+    if(realPossibilities.length != 0){
+      let random = Math.floor(Math.random()*realPossibilities.length-1)+1
+      let pushContainer = realPossibilities[random];
+      console.log(pushContainer);
+      let posCard = this.automaticAddCartaTablero(pushContainer[0], pushContainer[1])
+      this.vista.automaticAddCardMaquina(pushContainer[0], pushContainer[1], posCard);
+
+      let winner = this.checkWinnerGame();
+
+      if(winner == false){
+        this.addNewCardDeckPlayer()          
+      }
+      else{
+        this.vista.finishGame(winner)
+      }  
+
+
+    }else{
+      console.log("Cap possibilitat");
+    }
+
+    this.changeTorn();    
+
   }
 
   getTorn() {
@@ -63,14 +117,14 @@ export default class Game {
     for (let i = 0; i < 3; i++) {
       const card = this.deck.getCard();
       this.players[0].setCardsMaPlayer(card, i);
-      this.vista.addHandCards(card, i, this.allFunctions, 0);
+      this.vista.addHandCards(card, i, this.allFunctions, 0, this.gameMode);
     }
 
 
     for (let i = 0; i < 3; i++) {
       const card = this.deck.getCard();
       this.players[1].setCardsMaPlayer(card, i);
-      this.vista.addHandCards(card, i, this.allFunctions, 1);
+      this.vista.addHandCards(card, i, this.allFunctions, 1, this.gameMode);
     }
 
     this.changeTorn();
@@ -172,6 +226,27 @@ export default class Game {
     }
   }
 
+  automaticAddCartaTablero(card, nameContainer){
+    let posicioCarta = -1;
+    let cartaReal = this.players[1].getCardXId(card);
+    let checkPosar = this.checkTablero(cartaReal, nameContainer);
+
+    if(checkPosar){
+      this.players[1].deleteCardMaPlayer(card);
+
+      if (this.players[1].name == nameContainer.split('C')[0]) {
+        this.players[1].setCardTauler(cartaReal, nameContainer);
+        posicioCarta = this.players[1].getNumCartesTauler(nameContainer);
+      } 
+      else {
+        this.players[0].setCardTauler(cartaReal, nameContainer);
+        posicioCarta = this.players[0].getNumCartesTauler(nameContainer);
+      }
+    }
+
+    return posicioCarta;
+  }
+
   addCartaTablero(card, container, namePlayer) {
     let numCartesContainer = -1;
     if (card != '') {
@@ -257,7 +332,7 @@ export default class Game {
     for (let i = 0; i < ma.length; i++) {
       if (ma[i] == '') {
         this.players[this.torn].setCardsMaPlayer(card, i);
-        this.vista.addHandCards(card, i, this.allFunctions, this.torn);
+        this.vista.addHandCards(card, i, this.allFunctions, this.torn, this.gameMode);
       }
     }
   }

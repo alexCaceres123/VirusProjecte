@@ -53,7 +53,7 @@ export default class Vista{
 
     }
 
-    addHandCards(card, index, allFunctions, torn){
+    addHandCards(card, index, allFunctions, torn, gameMode){
         let src = `/img/${card.color}-${card.tipus}.png`;
         let id = card.id;
 
@@ -64,15 +64,17 @@ export default class Vista{
         img.setAttribute("draggable", "true");
         this.parentContainer.appendChild(img);
 
-        img.addEventListener("dragstart", this.cardDragStart)
+        if(this.players[torn] == "player" || (this.players[torn] == "maquina" && gameMode != "maquina")){
+            img.addEventListener("dragstart", this.cardDragStart)
 
-        img.addEventListener("mouseover", () => {
-            allFunctions["onPosarCarta"](img, true, this.players[torn]);
-        });
+            img.addEventListener("mouseover", () => {
+                allFunctions["onPosarCarta"](img, true, this.players[torn]);
+            });
 
-        img.addEventListener('mouseout', () => {
-            this.deleteClassDragOver();
-        });
+            img.addEventListener('mouseout', () => {
+                this.deleteClassDragOver();
+            });
+        }
     }
 
     disableButtonStartGame(){
@@ -143,7 +145,6 @@ export default class Vista{
 
             let winner = allFunctions["checkWinnerGame"]();
 
-            console.log(numberPosition);
             if(winner == false){
                 if(numberPosition != -2){
                     allFunctions["addNewCardDeckPlayer"]();
@@ -153,6 +154,22 @@ export default class Vista{
                 this.finishGame(winner)
             }  
         } 
+    }
+
+    automaticAddCardMaquina(idcard, containerName, posCard){
+        if(posCard != -1){
+            let src = `/img/${idcard.split("_")[1]}-${idcard.split("_")[0]}.png`;
+            let id = idcard;
+
+            const img = document.createElement("img");
+            img.setAttribute("src", src);
+            img.setAttribute("class",  `cardDentroTablero${posCard - 1}`);
+            img.setAttribute("id", `${id}`);
+            img.setAttribute("draggable", "true");
+
+            let containerAdd = document.querySelector(`.${containerName}`);
+            containerAdd.appendChild(img);
+        }
     }
 
     finishGame(nameWinner){
