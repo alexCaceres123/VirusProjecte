@@ -83,15 +83,25 @@ export default class Game {
       let winner = this.checkWinnerGame();
 
       if(winner == false){
-        this.addNewCardDeckPlayer()          
+        this.addNewCardDeckPlayer();          
       }
       else{
         this.vista.finishGame(winner)
       }  
+    }
+    else{
 
+      for(let i = 0; i < 3; i++){
+        console.log(cartesMaquina[i].id);
+        this.automaticTrashCard(cartesMaquina[i].id);
+      }
 
-    }else{
-      console.log("Cap possibilitat");
+      for (let i = 0; i < 3; i++) {
+        const card = this.deck.getCard();
+        this.players[1].setCardsMaPlayer(card, i);
+        this.vista.addHandCards(card, i, this.allFunctions, 1, this.gameMode);
+      }
+      
     }
 
     this.changeTorn();    
@@ -352,6 +362,15 @@ export default class Game {
     if (this.changeValTorn == 3) {
       this.changeTorn();
     }
+  }
+
+  automaticTrashCard(idCard){
+    const tipus = idCard.split('_')[0];
+    const color = idCard.split('_')[1];
+    const number = idCard.split('_')[2];
+    const card = this.deck.createCard(tipus, color, number);
+    this.deck.setCard(card);
+    this.players[1].deleteCardMaPlayer(card.id);
   }
 
   checkWinnerGame() {
