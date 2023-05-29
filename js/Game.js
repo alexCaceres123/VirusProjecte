@@ -49,7 +49,7 @@ export default class Game {
    */
   changeTorn() {
     this.changeValTorn = 0;
-    this.vista.changeTornView(this.torn);
+    this.vista.changeTornView(this.torn, this.gameMode);
 
     if (this.torn == 0) {
       this.torn = 1;
@@ -93,7 +93,6 @@ export default class Game {
       const posCard = this.automaticAddCartaTablero(pushContainer[0], pushContainer[1]);
       this.vista.automaticAddCardMaquina(pushContainer[0], pushContainer[1], posCard);
 
-      console.log(pushContainer);
       const winner = this.checkWinnerGame();
 
       if (winner == false) {

@@ -232,7 +232,7 @@ export default class Vista {
    * Funció encarregada de cambiar la vista de les cartes dels jugador depenguent del torn
    * @param {int} torn
    */
-  changeTornView(torn) {
+  changeTornView(torn, gameMode) {
     for (const handCard of document.querySelectorAll(`.${this.players[torn]}Card`)) {
       handCard.src = '/img/cartaRedera.png';
     }
@@ -246,9 +246,11 @@ export default class Vista {
       torn = 0;
     }
 
-    for (let i = 0; i < 3; i++) {
-      const handCard = document.querySelector(`.${this.players[torn]}Card${i + 1}`);
-      handCard.src = `/img/${handCard.id.split('_')[1]}-${handCard.id.split('_')[0]}.png`;
+    if(this.players[torn] == "player" || (this.players[torn] == "maquina" && gameMode != "maquina")){
+      for (let i = 0; i < 3; i++) {
+        const handCard = document.querySelector(`.${this.players[torn]}Card${i + 1}`);
+        handCard.src = `/img/${handCard.id.split('_')[1]}-${handCard.id.split('_')[0]}.png`;
+      }
     }
 
     let changeTornLogo = document.querySelector(`.${this.players[torn]}Logo`);
