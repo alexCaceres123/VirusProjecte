@@ -55,7 +55,7 @@ export default class Game {
       this.torn = 1;
 
       if (this.gameMode == 'maquina') {
-        this.maquinaPlays();
+        setTimeout(this.maquinaPlays.bind(this), 2000);
       }
     } else if (this.torn == 1) {
       this.torn = 0;
