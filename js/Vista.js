@@ -190,6 +190,9 @@ export default class Vista {
       const src = `/img/${idcard.split('_')[1]}-${idcard.split('_')[0]}.png`;
       const id = idcard;
 
+      let deleteCard = document.getElementById(idcard);
+      this.parentContainer.removeChild(deleteCard);
+      
       const img = document.createElement('img');
       img.setAttribute('src', src);
       img.setAttribute('class', `cardDentroTablero${posCard - 1}`);
