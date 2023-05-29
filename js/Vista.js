@@ -192,7 +192,7 @@ export default class Vista {
 
       let deleteCard = document.getElementById(idcard);
       this.parentContainer.removeChild(deleteCard);
-      
+
       const img = document.createElement('img');
       img.setAttribute('src', src);
       img.setAttribute('class', `cardDentroTablero${posCard - 1}`);
@@ -237,6 +237,9 @@ export default class Vista {
       handCard.src = '/img/cartaRedera.png';
     }
 
+    let noTornLogo = document.querySelector(`.${this.players[torn]}Logo`);
+    noTornLogo.classList.remove(`${this.players[torn]}LogoBorder`);
+
     if (torn == 0) {
       torn = 1;
     } else if (torn == 1) {
@@ -247,6 +250,10 @@ export default class Vista {
       const handCard = document.querySelector(`.${this.players[torn]}Card${i + 1}`);
       handCard.src = `/img/${handCard.id.split('_')[1]}-${handCard.id.split('_')[0]}.png`;
     }
+
+    let changeTornLogo = document.querySelector(`.${this.players[torn]}Logo`);
+    changeTornLogo.classList.add(`${this.players[torn]}LogoBorder`);
+
   }
   /**
    * Funció encarregada de borrar una carta del tablero

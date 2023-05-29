@@ -29,10 +29,21 @@ body{
     width: 13%;
     left: 2vh;
     top: 3vh;
-    border: 3px solid black;
-    border-radius: 12vh;
     z-index: 1;
     background-color: white;
+    border-radius: 12vh;
+}
+
+.maquinaLogoBorder{
+    border: 2px solid #ffb62f;
+    border-radius: 12vh;
+    box-shadow: 0px 0px 4vh #ffb62f;
+}
+
+.playerLogoBorder{
+    border: 2px solid rgb(1, 183, 82);
+    border-radius: 12vh;
+    box-shadow: 0px 0px 4vh #4f9;;
 }
 
 .playerLogo{
@@ -40,9 +51,8 @@ body{
     width: 13%;
     bottom: 3vh;
     right: 2vh;
-    border: 3px solid black;
-    border-radius: 12vh;
     z-index: 1;
+    border-radius: 12vh;
     background-color: white;
 }
 
