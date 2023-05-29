@@ -418,6 +418,7 @@ export default class Game {
     const card = this.deck.createCard(tipus, color, number);
     this.deck.setCard(card);
     this.players[1].deleteCardMaPlayer(card.id);
+    this.vista.automaticTrashCardMaquina(idCard);
   }
   /**
    * Funció que mirara si algu ha guanyat

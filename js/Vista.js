@@ -289,4 +289,12 @@ export default class Vista {
     this.alert.style.display = 'none';
     this.modeAlert.style.display = 'none';
   }
+  /**
+   * Borra Cartes de maquina
+   * @param {String} idCard
+   */
+  automaticTrashCardMaquina(idCard) {
+    let deleteCard = document.getElementById(idCard);
+    this.parentContainer.removeChild(deleteCard);
+  }
 }
