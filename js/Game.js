@@ -90,10 +90,10 @@ export default class Game {
     if (realPossibilities.length != 0) {
       const random = Math.floor(Math.random()*realPossibilities.length-1)+1;
       const pushContainer = realPossibilities[random];
-      console.log(pushContainer);
       const posCard = this.automaticAddCartaTablero(pushContainer[0], pushContainer[1]);
       this.vista.automaticAddCardMaquina(pushContainer[0], pushContainer[1], posCard);
 
+      console.log(pushContainer);
       const winner = this.checkWinnerGame();
 
       if (winner == false) {
@@ -103,7 +103,6 @@ export default class Game {
       }
     } else {
       for (let i = 0; i < 3; i++) {
-        console.log(cartesMaquina[i].id);
         this.automaticTrashCard(cartesMaquina[i].id);
       }
 
@@ -112,6 +111,8 @@ export default class Game {
         this.players[1].setCardsMaPlayer(card, i);
         this.vista.addHandCards(card, i, this.allFunctions, 1, this.gameMode);
       }
+
+      console.log("cambi de cartes");
     }
 
     this.changeTorn();
