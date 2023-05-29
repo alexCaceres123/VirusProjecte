@@ -12,10 +12,11 @@ export default class Vista {
     this.allContainers = document.querySelectorAll('.cardsContainer');
     this.parentContainer = document.querySelector('.container');
     this.trash = document.querySelector('.trash');
-    this.winner = document.querySelector('.winner');
     this.labelWinner = document.querySelector('.winnerP');
     this.players = ['player', 'maquina'];
     this.alert = document.getElementById('GameModeDiv');
+    this.winnAlert = document.querySelector(".winAlert");
+    this.modeAlert = document.querySelector(".alertMode");
     this.buttonOnevsOne = document.querySelector('.onePlayerMode');
     this.buttonMaquinavsOne = document.querySelector('.maquinaMode');
   }
@@ -208,8 +209,12 @@ export default class Vista {
    * @param {String} nameWinner
    */
   finishGame(nameWinner) {
-    this.winner.style.display = 'block';
+    this.alert.style.display = 'flex';
+    this.winnAlert.style.display = 'flex';
     this.labelWinner.innerHTML = `${nameWinner.toUpperCase()} GUANYA!`;
+
+    let img = document.querySelector('.imgWinner');
+    img.src = (`/img/${nameWinner}Logo.png`);
   }
 
   /**
@@ -282,5 +287,6 @@ export default class Vista {
    */
   disableAlert() {
     this.alert.style.display = 'none';
+    this.modeAlert.style.display = 'none';
   }
 }

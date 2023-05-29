@@ -298,6 +298,66 @@ body{
 }
 
 
+.winAlert{
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    font-size: 7vh;
+    text-align: center;
+    width: 40vw;
+    height:60vh;
+    background-color: white; 
+    z-index: 3;
+    border-radius: 3%;
+    padding: 1%;
+    display: none;
+    animation-name: moveFromOutside;
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+}
+
+.imgWinner{
+    width: 40%;
+    border: 3px solid black;
+    border-radius: 20vh;
+    margin-top: 5vh;
+    animation: wiggle 2s linear infinite;
+}
+
+@keyframes wiggle {
+    0%, 7% {
+      transform: rotateZ(0);
+    }
+    15% {
+      transform: rotateZ(-15deg);
+    }
+    20% {
+      transform: rotateZ(10deg);
+    }
+    25% {
+      transform: rotateZ(-10deg);
+    }
+    30% {
+      transform: rotateZ(6deg);
+    }
+    35% {
+      transform: rotateZ(-4deg);
+    }
+    40%, 100% {
+      transform: rotateZ(0);
+    }
+  }
+
+@keyframes moveFromOutside {
+    from {
+      transform: translateY(-600px);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+
 
 
 
